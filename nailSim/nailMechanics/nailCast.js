@@ -42,6 +42,7 @@ const nailCast = (game) => {
 
   setTimeout(() => {
     game.nailCastText.destroy()
+    game.nailCastText = null
     game.nailCastObject = null
     leftShadowCap.destroy()
     middleShadowCap.destroy()

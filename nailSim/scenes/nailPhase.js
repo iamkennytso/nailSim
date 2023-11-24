@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
-import { canvasHeight, canvasWidth } from './constants';
-import { nailCast, nailThunder} from './nailMechanics';
+import { canvasHeight, canvasWidth } from '../constants';
+import { nailCast, nailThunder} from '../nailMechanics';
+import { gameOver } from '../components';
 
 const playerVelo = 300
 
@@ -19,6 +20,8 @@ export class NailPhaseScene extends Phaser.Scene {
     this.healer2
     this.tank1
     this.tank2
+    this.npcAllies
+
 
     this.player
     this.playerRole
@@ -35,8 +38,7 @@ export class NailPhaseScene extends Phaser.Scene {
   }
 
   init(data) {
-    // this.playerRole = data.playerRole
-    this.playerRole = 'dpsChar'
+    this.playerRole = data.playerRole
   }
 
   preload() {
@@ -54,37 +56,38 @@ export class NailPhaseScene extends Phaser.Scene {
   }
 
   create() {
-    const r3 = this.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
-    r3.setStrokeStyle(2, 0x1a65ac);
+    const arena = this.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
+    arena.setStrokeStyle(2, 0x1a65ac);
 
     const npcAllies = []
     if (this.playerRole === 'dpsChar') {
-      this.player = this.add.image(canvasWidth / 2- 40, canvasHeight / 2 + 100, 'dpsChar')
+      this.player = this.add.image(canvasWidth / 2- 40, canvasHeight / 2 + 100, 'dpsChar').setName('player')
     } else {
-      this.dps1 = this.add.image(canvasWidth / 2 -  0, canvasHeight / 2 + 100, 'dpsChar')
+      this.dps1 = this.add.image(canvasWidth / 2 -  0, canvasHeight / 2 + 100, 'dpsChar').setName('dps1')
       npcAllies.push(this.dps1)
     }
-    this.dps2 = this.add.image(canvasWidth / 2 - 20, canvasHeight / 2 + 100, 'dpsChar')
-    this.dps3 = this.add.image(canvasWidth / 2 + 20, canvasHeight / 2 + 100, 'dpsChar')
-    this.dps4 = this.add.image(canvasWidth / 2 + 40, canvasHeight / 2 + 100, 'dpsChar')
+    this.dps2 = this.add.image(canvasWidth / 2 - 20, canvasHeight / 2 + 100, 'dpsChar').setName('dps2')
+    this.dps3 = this.add.image(canvasWidth / 2 + 20, canvasHeight / 2 + 100, 'dpsChar').setName('dps3')
+    this.dps4 = this.add.image(canvasWidth / 2 + 40, canvasHeight / 2 + 100, 'dpsChar').setName('dps4')
 
     if (this.playerRole === 'healChar') {
-      this.player = this.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar')
+      this.player = this.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('player')
     } else {
-      this.heal1 = this.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar')
+      this.heal1 = this.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('heal1')
       npcAllies.push(this.heal1)
     }
-    this.heal2 = this.add.image(canvasWidth / 2 - 30, canvasHeight / 2 + 90, 'healChar')
+    this.heal2 = this.add.image(canvasWidth / 2 - 30, canvasHeight / 2 + 90, 'healChar').setName('heal2')
 
     if (this.playerRole === 'tankChar') {
-      this.player = this.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar')
+      this.player = this.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar').setName('player')
     } else {
-      this.tank1 = this.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar')
+      this.tank1 = this.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar').setName('tank1')
       npcAllies.push(this.tank1) 
     }
-    this.tank2 = this.add.image(canvasWidth / 2 + 40, canvasHeight / 2 - 100, 'tankChar')
+    this.tank2 = this.add.image(canvasWidth / 2 + 40, canvasHeight / 2 - 100, 'tankChar').setName('tank2')
 
     npcAllies.push(this.dps2, this.dps3, this.dps4, this.heal2, this.tank2)
+    this.npcAllies = npcAllies
     lowerOpacity(npcAllies)
 
     this.nail = this.add.image(canvasWidth / 2, canvasHeight / 2, 'nail')
@@ -96,17 +99,18 @@ export class NailPhaseScene extends Phaser.Scene {
     this.iceOrder = shuffle([...npcAllies, this.player])
     this.fireTetherOrder = shuffle([this.tank2, this.heal2, this.dps4, this.player])
 
-    this.thunderOrder = [this.heal1, this.heal2]
+    this.thunderOrder = [this.heal1, this.tank1]
 
-    // this.time.delayedCall(3000, () => {
-    //   this.nailCastObject = {
-    //     text: "Bahamut's Favor",
-    //     time: 5000
-    //   }
-    // })
+    // events
+    this.time.delayedCall(3000, () => {
+      this.nailCastObject = {
+        text: "Bahamut's Favor",
+        time: 5000
+      }
+    })
 
-    this.time.delayedCall(1000, () => {
-      nailThunder(this, [this.thunderOrder[0], this.thunderOrder[1]])
+    this.time.delayedCall(10000, () => {
+      nailThunder(this, 1)
     })
 
     this.movement = this.input.keyboard.addKeys({ 

@@ -1,6 +1,6 @@
 import { canvasHeight, canvasWidth } from './constants'
-import { NailPhaseScene } from './nailPhase'
-import { RoleSelectionScene } from './roleSelectionScene'
+import { NailPhaseScene } from './scenes/nailPhase'
+import { RoleSelectionScene } from './scenes/roleSelectionScene'
 import './style.css'
 import Phaser from 'phaser'
 
@@ -12,8 +12,8 @@ const config = {
   physics: {
     default: 'arcade'
   },
-  // scene: [RoleSelectionScene, NailPhaseScene]
-  scene: [NailPhaseScene]
+  scene: [RoleSelectionScene, NailPhaseScene]
+  // scene: [NailPhaseScene]
 }
 
 const game = new Phaser.Game(config)
