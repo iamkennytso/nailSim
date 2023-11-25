@@ -2,7 +2,6 @@ import Phaser from 'phaser'
 import { canvasHeight, canvasWidth } from '../constants';
 
 const roleSelectionClickListener = (game, node) => {
-  console.log(node.texture.key)
   node.setInteractive();
 
   node.on('pointerup', () => {

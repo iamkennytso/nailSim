@@ -1,11 +1,13 @@
 import Phaser from 'phaser'
 import { canvasHeight, canvasWidth } from '../constants';
-import { nailCast, nailThunder} from '../nailMechanics';
-import { gameOver } from '../components';
+import { nailCast, nailStatements, nailThunder} from '../nailMechanics';
 
-const playerVelo = 300
+const playerVelo = 250
 
-const lowerOpacity = (nodes) => nodes.forEach(node => node.alpha = .33)
+const setUpAllies = (nodes, game) => nodes.forEach(node => {
+  node.alpha = .33
+  game.physics.add.existing(node)
+})
 
 const shuffle = array => array.sort(() => Math.random() - .5)
 
@@ -21,7 +23,6 @@ export class NailPhaseScene extends Phaser.Scene {
     this.tank1
     this.tank2
     this.npcAllies
-
 
     this.player
     this.playerRole
@@ -88,20 +89,19 @@ export class NailPhaseScene extends Phaser.Scene {
 
     npcAllies.push(this.dps2, this.dps3, this.dps4, this.heal2, this.tank2)
     this.npcAllies = npcAllies
-    lowerOpacity(npcAllies)
+    setUpAllies(npcAllies, this)
 
     this.nail = this.add.image(canvasWidth / 2, canvasHeight / 2, 'nail')
     this.player.setDepth(1);
     this.physics.add.existing(this.player)
 
     this.doomOrder = shuffle([...npcAllies, this.player])
-    // this.thunderOrder = shuffle([...npcAllies, this.player])
     this.iceOrder = shuffle([...npcAllies, this.player])
     this.fireTetherOrder = shuffle([this.tank2, this.heal2, this.dps4, this.player])
 
-    this.thunderOrder = [this.heal1, this.tank1]
+    // this.thunderOrder = shuffle([...npcAllies, this.player])
+    this.thunderOrder = [this.heal1, this.player]
 
-    // events
     this.time.delayedCall(3000, () => {
       this.nailCastObject = {
         text: "Bahamut's Favor",
@@ -111,7 +111,14 @@ export class NailPhaseScene extends Phaser.Scene {
 
     this.time.delayedCall(10000, () => {
       nailThunder(this, 1)
+      // nailStatements(1)
     })
+
+    this.graphics = this.add.graphics();
+
+    this.graphics.lineStyle(100, '0xebf1ed', 1);
+
+    this.graphics.strokeCircle(this.nail.x, this.nail.y, 200);
 
     this.movement = this.input.keyboard.addKeys({ 
       'up': Phaser.Input.Keyboard.KeyCodes.W, 

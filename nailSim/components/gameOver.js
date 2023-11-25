@@ -1,8 +1,8 @@
 import { canvasHeight, canvasWidth } from "../constants"
 
-const gameOver = (game) => {
+const gameOver = (game, win = false) => {
   const gameOverContainer = game.add.rectangle(canvasWidth / 2, canvasHeight / 2, canvasWidth / 2, canvasHeight / 2, '0x808080', .5).setDepth(2)
-  game.add.text(gameOverContainer.x, gameOverContainer.y - (gameOverContainer.height / 3), 'GAME OVER').setFontSize(40).setOrigin(0.5).setDepth(3)
+  game.add.text(gameOverContainer.x, gameOverContainer.y - (gameOverContainer.height / 3), win ? 'GOOD JOB!' : 'YOU FAILED').setFontSize(40).setOrigin(0.5).setDepth(3)
   const retryButton = game.add.rectangle((gameOverContainer.x - (gameOverContainer.width / 2)) + gameOverContainer.width / 4, gameOverContainer.y + (gameOverContainer.height / 6), 150, 50, '0xFFEDA2', .75).setDepth(3).setOrigin(0.5)
   game.add.text(retryButton.x, retryButton.y, 'RETRY').setFontSize(20).setOrigin(0.5).setDepth(4)
   const roleSelectButton = game.add.rectangle((gameOverContainer.x - (gameOverContainer.width / 2)) + (3 * (gameOverContainer.width / 4)), gameOverContainer.y + (gameOverContainer.height / 6), 150, 50, '0xFFEDA2', .75).setDepth(3).setOrigin(0.5)
