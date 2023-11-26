@@ -12,8 +12,8 @@ const config = {
   physics: {
     default: 'arcade'
   },
-  scene: [RoleSelectionScene, NailPhaseScene]
-  // scene: [NailPhaseScene]
+  // scene: [RoleSelectionScene, NailPhaseScene]
+  scene: [NailPhaseScene]
 }
 
 const game = new Phaser.Game(config)

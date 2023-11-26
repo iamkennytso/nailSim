@@ -1,10 +1,13 @@
-const nailStatements = (phase) => {
+import { nailIn } from "./statements"
+
+const nailStatements = (game, phase) => {
   switch (phase) {
     case 1:
       const isStack = !!Math.round(Math.random)
       setTimeout(() => {
-        nailIn()
-      }, 6000)
+        nailIn(game)
+      // }, 6000)
+      }, 1000)
   }
 }
 

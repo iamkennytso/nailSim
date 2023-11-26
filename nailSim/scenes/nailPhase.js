@@ -1,11 +1,14 @@
 import Phaser from 'phaser'
-import { canvasHeight, canvasWidth } from '../constants';
+import { canvasHeight, canvasWidth, npcSpriteDepth, playerSpriteDepth } from '../constants';
 import { nailCast, nailStatements, nailThunder} from '../nailMechanics';
+import { drawCircularLine } from '../utils';
+import { gameOver } from '../components';
 
 const playerVelo = 250
 
 const setUpAllies = (nodes, game) => nodes.forEach(node => {
   node.alpha = .33
+  node.setDepth(npcSpriteDepth)
   game.physics.add.existing(node)
 })
 
@@ -27,9 +30,9 @@ export class NailPhaseScene extends Phaser.Scene {
     this.player
     this.playerRole
     this.nail
+    this.arena
     this.nailCastObject
     this.nailCastText
-    this.nailCastTime
 
     this.doomOrder
     this.thunderOrder
@@ -39,7 +42,8 @@ export class NailPhaseScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.playerRole = data.playerRole
+    console.log(data)
+    this.playerRole = data.playerRole || 'dpsChar'
   }
 
   preload() {
@@ -57,9 +61,11 @@ export class NailPhaseScene extends Phaser.Scene {
   }
 
   create() {
-    const arena = this.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
-    arena.setStrokeStyle(2, 0x1a65ac);
 
+    const arenaLine = this.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
+    arenaLine.setStrokeStyle(2, 0x1a65ac);
+    this.arena = new Phaser.Geom.Circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2)
+  
     const npcAllies = []
     if (this.playerRole === 'dpsChar') {
       this.player = this.add.image(canvasWidth / 2- 40, canvasHeight / 2 + 100, 'dpsChar').setName('player')
@@ -92,8 +98,12 @@ export class NailPhaseScene extends Phaser.Scene {
     setUpAllies(npcAllies, this)
 
     this.nail = this.add.image(canvasWidth / 2, canvasHeight / 2, 'nail')
-    this.player.setDepth(1);
+    this.nail.setDepth(npcSpriteDepth)
+    this.player.setDepth(playerSpriteDepth);
     this.physics.add.existing(this.player)
+    this.physics.world.enable(this.player)
+    this.physics.world.setBounds(this.arena.x - this.arena.radius, this.arena.y - this.arena.radius, this.arena.radius * 2, this.arena.radius * 2);
+
 
     this.doomOrder = shuffle([...npcAllies, this.player])
     this.iceOrder = shuffle([...npcAllies, this.player])
@@ -102,23 +112,21 @@ export class NailPhaseScene extends Phaser.Scene {
     // this.thunderOrder = shuffle([...npcAllies, this.player])
     this.thunderOrder = [this.heal1, this.player]
 
-    this.time.delayedCall(3000, () => {
-      this.nailCastObject = {
-        text: "Bahamut's Favor",
-        time: 5000
-      }
-    })
+    // this.time.delayedCall(3000, () => {
+    //   this.nailCastObject = {
+    //     text: "Bahamut's Favor",
+    //     time: 5000
+    //   }
+    // })
 
-    this.time.delayedCall(10000, () => {
-      nailThunder(this, 1)
-      // nailStatements(1)
-    })
+    // this.time.delayedCall(10000, () => {
+    //   nailThunder(this, 1)
+    //   nailStatements(this, 1)
+    // })
 
-    this.graphics = this.add.graphics();
-
-    this.graphics.lineStyle(100, '0xebf1ed', 1);
-
-    this.graphics.strokeCircle(this.nail.x, this.nail.y, 200);
+    // this.time.delayedCall(1000, () => {
+    //   nailStatements(this, 1)
+    // })
 
     this.movement = this.input.keyboard.addKeys({ 
       'up': Phaser.Input.Keyboard.KeyCodes.W, 
@@ -144,6 +152,10 @@ export class NailPhaseScene extends Phaser.Scene {
       this.player.body.setVelocityY(playerVelo)
     } else {
       this.player.body.setVelocityY(0)
+    }
+
+    if (!Phaser.Geom.Circle.Contains(this.arena, this.player.x, this.player.y)) {
+      gameOver(this)
     }
 
     if (!!this.nailCastObject && !this.nailCastText) {
