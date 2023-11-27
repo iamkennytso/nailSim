@@ -3,7 +3,7 @@ import { canvasHeight, canvasWidth, npcSpriteDepth, playerSpriteDepth } from '..
 import { nailCast, nailStatements, nailThunder} from '../nailMechanics';
 import { drawCircularLine } from '../utils';
 import { gameOver } from '../components';
-import { setupArenaAndSprites, setupControls, setupOrders } from './nailPhase.helper';
+import { setupArena, setupControls, setupOrders, setupSprites, setupStatements } from './nailPhase.helper';
 
 const playerVelo = 250
 
@@ -33,6 +33,10 @@ export class NailPhaseScene extends Phaser.Scene {
     this.fireTetherOrder
     this.quoteOrder
 
+    this.statementOne
+    this.statementTwo
+    this.statementThree
+
     this.outerCircle
     this.innerCircle
   }
@@ -56,9 +60,12 @@ export class NailPhaseScene extends Phaser.Scene {
   }
 
   create() {
-    setupArenaAndSprites(this)
+    setupArena(this)
+    setupSprites(this)
     setupOrders(this)
     setupControls(this)
+    setupStatements(this)
+
     // this.time.delayedCall(3000, () => {
     //   this.nailCastObject = {
     //     text: "Bahamut's Favor",
@@ -94,14 +101,12 @@ export class NailPhaseScene extends Phaser.Scene {
       this.player.body.setVelocityY(0)
     }
 
-    // if (!Phaser.Geom.Circle.Contains(this.arena, this.player.x, this.player.y)) {
-    //   gameOver(this)
-    // }
+    if (!Phaser.Geom.Circle.Contains(this.arena, this.player.x, this.player.y)) {
+      gameOver(this)
+    }
 
     if (!!this.nailCastObject && !this.nailCastText) {
       nailCast(this)
     }
-
-
   }
 }

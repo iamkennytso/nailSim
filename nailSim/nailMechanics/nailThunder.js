@@ -74,7 +74,6 @@ const nailThunder = (game, phase) => {
       }, 1000)
 
       setTimeout(() => {
-        let failed = false
         thunderedPlayers.forEach(player => {
           const thunderSpray = game.add.circle(player.x, player.y, 60, '0xFFFF00');
           thunderSpray.alpha = .25
@@ -82,12 +81,10 @@ const nailThunder = (game, phase) => {
           const thunderOverlaps = game.physics.overlapCirc(thunderSpray.x, thunderSpray.y, thunderSpray.radius, true, true)
           if (thunderOverlaps.length > 1) {
             gameOver(game)
-            failed = true
           }
 
           setTimeout(() => {
             thunderSpray.destroy()
-            if (!failed) gameOver(game, true)
           }, 500)
         })
       }, thunderDuration)

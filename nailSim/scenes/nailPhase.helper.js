@@ -8,11 +8,20 @@ const setUpAllies = (nodes, game) => nodes.forEach(node => {
   game.physics.add.existing(node)
 })
 
-export const setupArenaAndSprites = (game) => {
+export const setupArena = game => {
   const arenaLine = game.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
   arenaLine.setStrokeStyle(2, 0x1a65ac);
   game.arena = new Phaser.Geom.Circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
+}
 
+export const setupStatements = game => {
+  const statementsX = canvasWidth - 10
+  game.statementOne = game.add.text(statementsX, canvasHeight - 65, '').setFontSize(20).setOrigin(1,1)
+  game.statementTwo = game.add.text(statementsX, canvasHeight - 40, '').setFontSize(20).setOrigin(1,1)
+  game.statementThree = game.add.text(statementsX, canvasHeight - 15, '').setFontSize(20).setOrigin(1,1)
+}
+
+export const setupSprites = game => {
   const npcAllies = []
   if (game.playerRole === 'dpsChar') {
     game.player = game.add.image(canvasWidth / 2 - 40, canvasHeight / 2 + 100, 'dpsChar').setName('player')
@@ -44,7 +53,7 @@ export const setupArenaAndSprites = (game) => {
   game.npcAllies = npcAllies
   setUpAllies(npcAllies, game)
 
-  game.nail = game.add.image(canvasWidth / 2, canvasHeight / 2, 'nail')
+  game.nail = game.add.image(canvasWidth / 2, canvasHeight / 2 , 'nail')
   game.nail.setDepth(npcSpriteDepth)
   game.player.setDepth(playerSpriteDepth);
   game.physics.add.existing(game.player)

@@ -53,5 +53,4 @@ const nailCast = (game) => {
   }, time)
 }
 
-
 export default nailCast

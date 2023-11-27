@@ -1,11 +1,13 @@
 import { gameOver } from "../../components";
-import { canvasHeight, canvasWidth } from "../../constants";
 
 const nailIn = (game) => {
-  const outerCircle = game.add.circle(canvasWidth / 2, canvasHeight / 2, 300, '0xc0c0c0');
-  const outerCircleEffective = new Phaser.Geom.Circle(canvasWidth / 2, canvasHeight / 2, 300);
-  const innerCircle = game.make.graphics().fillCircle(canvasWidth / 2, canvasHeight / 2, 150);
-  const innerCircleEffective = new Phaser.Geom.Circle(canvasWidth / 2, canvasHeight / 2, 150);
+  const {x, y} = game.nail
+  const graphics = game.add.graphics()
+  const outerCircle = game.add.circle(x, y, 250, '0x880808');
+  outerCircle.alpha = .5
+  const outerCircleEffective = new Phaser.Geom.Circle(x, y, 250);
+  const innerCircle = game.make.graphics().fillCircle(x, y, 130);
+  const innerCircleEffective = new Phaser.Geom.Circle(x, y, 130);
   const mask = innerCircle.createGeometryMask();
   mask.invertAlpha = true
   outerCircle.setMask(mask)
@@ -15,6 +17,12 @@ const nailIn = (game) => {
   if (isPlayerInOuterRing && !isPlayerInInnerRing) {
     gameOver(game)
   }
+
+  setTimeout(() => {
+    outerCircle.destroy()
+    innerCircle.destroy()
+    graphics.destroy()
+  }, 500)
 }
 
 export default nailIn
