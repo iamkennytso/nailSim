@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { nailCast, nailStatements, nailThunder} from '../nailMechanics';
+import { nailCast, nailDoom, nailStatements, nailThunder} from '../nailMechanics';
 import { gameOver } from '../components';
 import { setupArena, setupControls, setupOrders, setupSprites, setupStatements } from './nailPhase.helper';
 
@@ -65,21 +65,25 @@ export class NailPhaseScene extends Phaser.Scene {
     setupControls(this)
     setupStatements(this)
 
-    // this.time.delayedCall(3000, () => {
-    //   this.nailCastObject = {
-    //     text: "Bahamut's Favor",
-    //     time: 5000
-    //   }
-    // })
+    this.time.delayedCall(3000, () => {
+      this.nailCastObject = {
+        text: "Bahamut's Favor",
+        time: 5000
+      }
+    })
 
-    // this.time.delayedCall(10000, () => {
-    //   nailThunder(this, 1)
-    //   nailStatements(this, 1)
-    // })
-
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(10000, () => {
+      nailThunder(this, 1)
       nailStatements(this, 1)
     })
+
+    this.time.delayedCall(20000, () => {
+      nailDoom(this, 1)
+    })
+
+    // this.time.delayedCall(1000, () => {
+    //   nailDoom(this, 1)
+    // })
   }
 
   update() {

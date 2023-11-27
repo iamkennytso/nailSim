@@ -1,5 +1,5 @@
 import { gameOver } from "../components"
-import { canvasHeight, canvasWidth } from "../constants"
+import { canvasHeight, canvasWidth, thunderBackground } from "../constants"
 
 const thunderDuration = 6000
 const nailThunder = (game, phase) => {
@@ -8,7 +8,6 @@ const nailThunder = (game, phase) => {
     case 1:
       thunderedPlayers = game.thunderOrder.slice(0, 2)
       const thunderPlayersNames = thunderedPlayers.map(player => player.name)
-      console.log(thunderedPlayers)
       setTimeout(() => {
         let leftFilled = false
         game.npcAllies.forEach(ally => {
@@ -75,9 +74,9 @@ const nailThunder = (game, phase) => {
 
       setTimeout(() => {
         thunderedPlayers.forEach(player => {
-          const thunderSpray = game.add.circle(player.x, player.y, 60, '0xFFFF00');
+          const thunderSpray = game.add.circle(player.x, player.y, 60, thunderBackground);
           thunderSpray.alpha = .25
-          thunderSpray.setStrokeStyle(2, '0xFFFF00');
+          thunderSpray.setStrokeStyle(2, thunderBackground);
           const thunderOverlaps = game.physics.overlapCirc(thunderSpray.x, thunderSpray.y, thunderSpray.radius, true, true)
           if (thunderOverlaps.length > 1) {
             gameOver(game)

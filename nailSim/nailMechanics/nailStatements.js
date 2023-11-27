@@ -5,8 +5,7 @@ const nailStatements = (game, phase) => {
   switch (phase) {
     case 1:
       const isStack = !!Math.round(Math.random())
-      // const startTime = 7000
-      const startTime = 1000
+      const startTime = 7000
       game.statementTwo.setText('O hallowed moon,')
       game.statementThree.setText(isStack ? 'take fire and scorch my foes!' : 'shine you the iron path!')
       setTimeout(() => {

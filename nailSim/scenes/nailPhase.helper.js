@@ -1,4 +1,4 @@
-import { canvasHeight, canvasWidth, npcSpriteDepth, playerSpriteDepth } from "../constants"
+import { arenaStroke, canvasHeight, canvasWidth, npcSpriteDepth, playerSpriteDepth } from "../constants"
 
 const shuffle = array => array.sort(() => Math.random() - .5)
 
@@ -10,7 +10,7 @@ const setUpAllies = (nodes, game) => nodes.forEach(node => {
 
 export const setupArena = game => {
   const arenaLine = game.add.circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
-  arenaLine.setStrokeStyle(2, 0x1a65ac);
+  arenaLine.setStrokeStyle(2, arenaStroke);
   game.arena = new Phaser.Geom.Circle(canvasWidth / 2, canvasHeight / 2, (canvasHeight - 20) / 2);
 }
 

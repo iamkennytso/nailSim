@@ -1,9 +1,10 @@
 import { gameOver } from "../../components";
+import { moonBackground } from "../../constants";
 
 const nailIn = (game) => {
   const {x, y} = game.nail
   const graphics = game.add.graphics()
-  const outerCircle = game.add.circle(x, y, 250, '0x880808');
+  const outerCircle = game.add.circle(x, y, 250, moonBackground);
   outerCircle.alpha = .5
   const outerCircleEffective = new Phaser.Geom.Circle(x, y, 250);
   const innerCircle = game.make.graphics().fillCircle(x, y, 130);
