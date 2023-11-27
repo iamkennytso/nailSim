@@ -36,10 +36,11 @@ export const setupSprites = game => {
   if (game.playerRole === 'healChar') {
     game.player = game.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('player')
   } else {
-    game.heal1 = game.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('heal1')
-    npcAllies.push(game.heal1)
+    game.healer1 = game.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('healer1')
+    npcAllies.push(game.healer1)
   }
-  game.heal2 = game.add.image(canvasWidth / 2 - 30, canvasHeight / 2 + 90, 'healChar').setName('heal2')
+  game.healer2 = game.add.image(canvasWidth / 2 - 30, canvasHeight / 2 + 90, 'healChar').setName('healer2')
+  game.stackTarget = game.healer2
 
   if (game.playerRole === 'tankChar') {
     game.player = game.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar').setName('player')
@@ -49,7 +50,7 @@ export const setupSprites = game => {
   }
   game.tank2 = game.add.image(canvasWidth / 2 + 40, canvasHeight / 2 - 100, 'tankChar').setName('tank2')
 
-  npcAllies.push(game.dps2, game.dps3, game.dps4, game.heal2, game.tank2)
+  npcAllies.push(game.dps2, game.dps3, game.dps4, game.healer2, game.tank2)
   game.npcAllies = npcAllies
   setUpAllies(npcAllies, game)
 
@@ -65,7 +66,7 @@ export const setupOrders = (game) => {
   game.thunderOrder = shuffle([...game.npcAllies, game.player])
   game.doomOrder = shuffle([...game.npcAllies, game.player])
   game.iceOrder = shuffle([...game.npcAllies, game.player])
-  game.fireTetherOrder = shuffle([game.tank2, game.heal2, game.dps4, game.player])
+  game.fireTetherOrder = shuffle([game.tank2, game.healer2, game.dps4, game.player])
 }
 
 export const setupControls = (game) => {

@@ -37,12 +37,12 @@ export class RoleSelectionScene extends Phaser.Scene {
     this.tank2 = this.add.image(canvasWidth / 2 + 100, canvasHeight / 2 - 100, 'tankChar')
     this.dps1 = this.add.image(canvasWidth / 2 + 200, canvasHeight / 2, 'dpsChar')
     this.dps2 = this.add.image(canvasWidth / 2 + 100, canvasHeight / 2 + 100, 'dpsChar')
-    this.heal1 = this.add.image(canvasWidth / 2, canvasHeight / 2 + 200, 'healChar')
-    this.heal2 = this.add.image(canvasWidth / 2 - 100, canvasHeight / 2 + 100, 'healChar')
+    this.healer1 = this.add.image(canvasWidth / 2, canvasHeight / 2 + 200, 'healChar')
+    this.healer2 = this.add.image(canvasWidth / 2 - 100, canvasHeight / 2 + 100, 'healChar')
     this.dps3 = this.add.image(canvasWidth / 2 - 200, canvasHeight / 2, 'dpsChar')
     this.dps4 = this.add.image(canvasWidth / 2 - 100, canvasHeight / 2 - 100, 'dpsChar')
 
-    const nodes = [this.tank1, this.tank2, this.dps1, this.dps2, this.dps3, this.dps4, this.heal1, this.heal2]
+    const nodes = [this.tank1, this.tank2, this.dps1, this.dps2, this.dps3, this.dps4, this.healer1, this.healer2]
 
     nodes.forEach(node => roleSelectionClickListener(this, node))
   }

@@ -1,7 +1,5 @@
 import Phaser from 'phaser'
-import { canvasHeight, canvasWidth, npcSpriteDepth, playerSpriteDepth } from '../constants';
 import { nailCast, nailStatements, nailThunder} from '../nailMechanics';
-import { drawCircularLine } from '../utils';
 import { gameOver } from '../components';
 import { setupArena, setupControls, setupOrders, setupSprites, setupStatements } from './nailPhase.helper';
 
@@ -19,6 +17,7 @@ export class NailPhaseScene extends Phaser.Scene {
     this.tank1
     this.tank2
     this.npcAllies
+    this.stackTarget
 
     this.player
     this.playerRole

@@ -1,28 +1,26 @@
-import { moveOutOfOut, nailIn, nailOut } from "./statements"
+import { moveOutOfOut, moveInStack, nailIn, nailOut, nailStack } from "./statements"
 import { clearStatementText } from "./statements/helpers"
 
 const nailStatements = (game, phase) => {
   switch (phase) {
     case 1:
-      const isStack = !!Math.round(Math.random)
+      const isStack = !!Math.round(Math.random())
+      // const startTime = 7000
+      const startTime = 1000
       game.statementTwo.setText('O hallowed moon,')
       game.statementThree.setText(isStack ? 'take fire and scorch my foes!' : 'shine you the iron path!')
       setTimeout(() => {
         nailIn(game)
-      // }, 7000)
-      }, 1000)
+      }, startTime)
       setTimeout(() => {
-        moveOutOfOut(game)
-      // }, 7500)
-      }, 1500)
+        isStack ? moveInStack(game) : moveOutOfOut(game)
+      }, startTime + 500)
       setTimeout(() => {
-        nailOut(game)
-      // }, 10000)
-      }, 4000)
+        isStack ? nailStack(game) : nailOut(game)
+      }, startTime + 3000)
       setTimeout(() => {
         clearStatementText(game)
-      // }, 10500)
-      }, 4500)
+      }, startTime + 3500)
   }
 }
 
