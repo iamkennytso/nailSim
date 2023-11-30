@@ -32,12 +32,13 @@ export class NailPhaseScene extends Phaser.Scene {
     this.fireTetherOrder
     this.quoteOrder
 
+    this.cleanseCircles
+    this.activeCleanseCircles
+    this.playersCleanseCircleIdx
+
     this.statementOne
     this.statementTwo
     this.statementThree
-
-    this.outerCircle
-    this.innerCircle
   }
 
   init(data) {
@@ -60,30 +61,38 @@ export class NailPhaseScene extends Phaser.Scene {
 
   create() {
     setupArena(this)
+    setupControls(this)
     setupSprites(this)
     setupOrders(this)
-    setupControls(this)
     setupStatements(this)
+    this.cleanseCircles = [null, null, null, null, null, null, null, null]
+    this.activeCleanseCircles = [false, false, false, false, false, false, false, false]
+    this.playersCleanseCircleIdx = null
+    this.statementOne = ''
+    this.statementTwo = ''
+    this.statementThree = ''
 
-    this.time.delayedCall(3000, () => {
-      this.nailCastObject = {
-        text: "Bahamut's Favor",
-        time: 5000
-      }
-    })
+    // this.time.delayedCall(3000, () => {
+    //   this.nailCastObject = {
+    //     text: "Bahamut's Favor",
+    //     time: 5000
+    //   }
+    // })
 
-    this.time.delayedCall(10000, () => {
-      nailThunder(this, 1)
-      nailStatements(this, 1)
-    })
+    // this.time.delayedCall(10000, () => {
+    //   nailThunder(this, 1)
+    //   nailStatements(this, 1)
+    // })
 
-    this.time.delayedCall(20000, () => {
-      nailDoom(this, 1)
-    })
-
-    // this.time.delayedCall(1000, () => {
+    // this.time.delayedCall(20000, () => {
     //   nailDoom(this, 1)
     // })
+
+    this.doomOrder = [this.tank1, this.tank2]
+
+    this.time.delayedCall(1000, () => {
+      nailDoom(this, 1)
+    })
   }
 
   update() {
@@ -111,5 +120,13 @@ export class NailPhaseScene extends Phaser.Scene {
     if (!!this.nailCastObject && !this.nailCastText) {
       nailCast(this)
     }
+
+    const notPlayerCleanses = this.cleanseCircles.filter((_, idx) => this.activeCleanseCircles[idx] && idx !== this.playersCleanseCircleIdx)
+    notPlayerCleanses.forEach(cleanse => {
+      if (Phaser.Geom.Circle.Contains(cleanse, this.player.x, this.player.y)) {
+        console.log('player stepped on wrong puddle')
+        gameOver(this)
+      }
+    })
   }
 }

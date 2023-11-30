@@ -4,6 +4,10 @@ const gameOverContainerDepth = 30
 const titleTextDepth = 31
 const buttonTextureDepth = 31
 const buttonTextDepth = 32
+
+const restartGame = () => {
+
+}
 const gameOver = (game, win = false) => {
   const gameOverContainer = game.add.rectangle(canvasWidth / 2, canvasHeight / 2, canvasWidth / 2, canvasHeight / 2, dialogBoxBackground, .5).setDepth(gameOverContainerDepth)
   game.add.text(gameOverContainer.x, gameOverContainer.y - (gameOverContainer.height / 3), win ? 'GOOD JOB!' : 'YOU FAILED').setFontSize(40).setOrigin(0.5).setDepth(titleTextDepth)
@@ -14,7 +18,8 @@ const gameOver = (game, win = false) => {
 
   retryButton.setInteractive();
   retryButton.on('pointerup', () => {
-    game.scene.start('scene-nailPhase', { playerRole: game.player.texture.key })
+    console.log('restarting')
+    game.scene.restart('scene-nailPhase', { playerRole: game.player.texture.key })
   })
 
   roleSelectButton.setInteractive();
