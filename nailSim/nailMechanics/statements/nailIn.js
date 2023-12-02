@@ -16,6 +16,7 @@ const nailIn = (game) => {
   var isPlayerInInnerRing = Phaser.Geom.Circle.Contains(innerCircleEffective, game.player.x, game.player.y);
   if (isPlayerInOuterRing && !isPlayerInInnerRing) {
     gameOver(game)
+    console.log('player was not in')
   }
 
   setTimeout(() => {

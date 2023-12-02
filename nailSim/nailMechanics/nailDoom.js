@@ -51,6 +51,7 @@ const spawnSmallerDoom = (game, doomPuddle, doomPuddleHitbox, phase) => {
   const playerIsInDoom = Phaser.Geom.Circle.Contains(doomPuddleHitbox, player.x, player.y)
   if (playerIsInDoom) {
     gameOver(game)
+    console.log('player was in big doom puddle')
   }
   doomPuddle.destroy()
   const cleanseCircle = game.add.circle(x, y, 25, doomPuddleBackground);

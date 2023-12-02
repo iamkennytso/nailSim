@@ -14,8 +14,8 @@ const nailThunder = (game, phase) => {
           if (!thunderPlayersNames.includes(ally.name)) {
             game.tweens.add({
               targets: ally,
-              x: canvasWidth / 2, 
-              y: canvasHeight / 2 + 60,
+              x: game.nail.x, 
+              y: game.nail.y + 60,
               duration: 1000,
               ease: Phaser.Math.Easing.Linear,
             })
@@ -25,8 +25,8 @@ const nailThunder = (game, phase) => {
               const xOffset = random ? -60 : 60
               game.tweens.add({
                 targets: ally,
-                x: canvasWidth / 2 + xOffset,
-                y: canvasHeight / 2 - 60,
+                x: game.nail.x + xOffset,
+                y: game.nail.y - 60,
                 duration: 1000,
                 ease: Phaser.Math.Easing.Linear,
               })
@@ -52,8 +52,8 @@ const nailThunder = (game, phase) => {
               if (!leftFilled) {
                 game.tweens.add({
                   targets: ally,
-                  x: canvasWidth / 2 - 60,
-                  y: canvasHeight / 2 - 60,
+                  x: game.nail.x - 60,
+                  y: game.nail.y - 60,
                   duration: 1000,
                   ease: Phaser.Math.Easing.Linear,
                 })
@@ -61,8 +61,8 @@ const nailThunder = (game, phase) => {
               } else {
                 game.tweens.add({
                   targets: ally,
-                  x: canvasWidth / 2 + 60,
-                  y: canvasHeight / 2 - 60,
+                  x: game.nail.x + 60,
+                  y: game.nail.y - 60,
                   duration: 1000,
                   ease: Phaser.Math.Easing.Linear,
                 })
@@ -80,6 +80,7 @@ const nailThunder = (game, phase) => {
           const thunderOverlaps = game.physics.overlapCirc(thunderSpray.x, thunderSpray.y, thunderSpray.radius, true, true)
           if (thunderOverlaps.length > 1) {
             gameOver(game)
+            console.log('player was in thunder or splashed thunder')
           }
 
           setTimeout(() => {

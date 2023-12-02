@@ -22,40 +22,41 @@ export const setupStatements = game => {
 }
 
 export const setupSprites = game => {
+  game.nail = game.add.image(canvasWidth / 2, canvasHeight / 3 , 'nail')
+  game.nail.setDepth(npcSpriteDepth)
+
   const npcAllies = []
   if (game.playerRole === 'dpsChar') {
-    game.player = game.add.image(canvasWidth / 2 - 40, canvasHeight / 2 + 100, 'dpsChar').setName('player')
+    game.player = game.add.image(game.nail.x - 40, game.nail.y + 100, 'dpsChar').setName('player')
   } else {
-    game.dps1 = game.add.image(canvasWidth / 2 -  0, canvasHeight / 2 + 100, 'dpsChar').setName('dps1')
+    game.dps1 = game.add.image(game.nail.x - 40, game.nail.y + 100, 'dpsChar').setName('dps1')
     npcAllies.push(game.dps1)
   }
-  game.dps2 = game.add.image(canvasWidth / 2 - 20, canvasHeight / 2 + 100, 'dpsChar').setName('dps2')
-  game.dps3 = game.add.image(canvasWidth / 2 + 20, canvasHeight / 2 + 100, 'dpsChar').setName('dps3')
-  game.dps4 = game.add.image(canvasWidth / 2 + 40, canvasHeight / 2 + 100, 'dpsChar').setName('dps4')
+  game.dps2 = game.add.image(game.nail.x - 20, game.nail.y + 100, 'dpsChar').setName('dps2')
+  game.dps3 = game.add.image(game.nail.x + 20, game.nail.y + 100, 'dpsChar').setName('dps3')
+  game.dps4 = game.add.image(game.nail.x + 40, game.nail.y + 100, 'dpsChar').setName('dps4')
 
   if (game.playerRole === 'healChar') {
-    game.player = game.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('player')
+    game.player = game.add.image(game.nail.x + 30, game.nail.y + 90, 'healChar').setName('player')
   } else {
-    game.healer1 = game.add.image(canvasWidth / 2 + 30, canvasHeight / 2 + 90, 'healChar').setName('healer1')
+    game.healer1 = game.add.image(game.nail.x + 30, game.nail.y + 90, 'healChar').setName('healer1')
     npcAllies.push(game.healer1)
   }
-  game.healer2 = game.add.image(canvasWidth / 2 - 30, canvasHeight / 2 + 90, 'healChar').setName('healer2')
+  game.healer2 = game.add.image(game.nail.x - 30, game.nail.y + 90, 'healChar').setName('healer2')
   game.stackTarget = game.healer2
 
   if (game.playerRole === 'tankChar') {
-    game.player = game.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar').setName('player')
+    game.player = game.add.image(game.nail.x, game.nail.y - 100, 'tankChar').setName('player')
   } else {
-    game.tank1 = game.add.image(canvasWidth / 2 - 40, canvasHeight / 2 - 100, 'tankChar').setName('tank1')
+    game.tank1 = game.add.image(game.nail.x, game.nail.y - 100, 'tankChar').setName('tank1')
     npcAllies.push(game.tank1) 
   }
-  game.tank2 = game.add.image(canvasWidth / 2 + 40, canvasHeight / 2 - 100, 'tankChar').setName('tank2')
+  game.tank2 = game.add.image(game.nail.x, game.nail.y + 80, 'tankChar').setName('tank2')
 
   npcAllies.push(game.dps2, game.dps3, game.dps4, game.healer2, game.tank2)
   game.npcAllies = npcAllies
   setUpAllies(npcAllies, game)
 
-  game.nail = game.add.image(canvasWidth / 2, canvasHeight / 2 , 'nail')
-  game.nail.setDepth(npcSpriteDepth)
   game.player.setDepth(playerSpriteDepth);
   game.physics.add.existing(game.player)
   game.physics.world.enable(game.player)

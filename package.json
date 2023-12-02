@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "start": "cd nailsim && npm run dev"
+  }
+}

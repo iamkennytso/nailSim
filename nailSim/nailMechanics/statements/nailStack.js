@@ -7,6 +7,7 @@ const nailStack = game => {
   const beamOverlaps = game.physics.overlapCirc(beam.x, beam.y, beam.radius, true, true);
   if (beamOverlaps.length !== 8) {
     gameOver(game)
+    console.log('player did not stack')
   }
   setTimeout(() => {
     beam.destroy()

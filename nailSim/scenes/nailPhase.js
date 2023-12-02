@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { nailCast, nailDoom, nailStatements, nailThunder} from '../nailMechanics';
 import { gameOver } from '../components';
 import { setupArena, setupControls, setupOrders, setupSprites, setupStatements } from './nailPhase.helper';
+import { beamBackground, chariotBackground } from '../constants';
 
 const playerVelo = 250
 
@@ -95,9 +96,8 @@ export class NailPhaseScene extends Phaser.Scene {
       nailDoom(this, 0)
     })
 
-
     // this.time.delayedCall(1000, () => {
-    //   nailDoom(this, 0)
+    //   nailStatements(this, 1)
     // })
   }
 
@@ -121,6 +121,7 @@ export class NailPhaseScene extends Phaser.Scene {
 
     if (!Phaser.Geom.Circle.Contains(this.arena, this.player.x, this.player.y)) {
       gameOver(this)
+      console.log('player went outta bounds')
     }
 
     if (!!this.nailCastObject && !this.nailCastText) {
