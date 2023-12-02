@@ -3,41 +3,46 @@ import { gameOver } from "../components";
 import { doomPuddleBackground, thunderBackground, moonBackground } from "../constants";
 import { getNailPositions } from "../utils";
 
-const moveOutOfDoom = (game, doomPuddleHitbox) => {
-  const southOfNail = getNailPositions(game.nail, 0)
-  const southIsSafe = !Phaser.Geom.Circle.Contains(doomPuddleHitbox, southOfNail.x, southOfNail.y);
-  if (southIsSafe) {
-    return game.tweens.add({
-      targets: game.npcAllies,
-      x: southOfNail.x,
-      y: southOfNail.y,
-      duration: 1000,
-      ease: Phaser.Math.Easing.Linear,
-    })
+const moveOutOfDoom = (game, doomPuddleHitbox, curPhase) => {
+  const checkSpots = (safeArray, spotArray) => {
+    if (safeArray[0]) {
+      moveToSafeSpot(spotArray[0])
+    } else if (safeArray[1]) {
+      moveToSafeSpot(spotArray[1])
+    } else if (safeArray[2]) {
+      moveToSafeSpot(spotArray[2])
+    }
   }
-  const northEastOfNail = getNailPositions(game.nail, 2)
-  const northEastIsSafe = !Phaser.Geom.Circle.Contains(doomPuddleHitbox, northEastOfNail.x, northEastOfNail.y);
-  if (northEastIsSafe) {
-    return game.tweens.add({
+
+  const moveToSafeSpot = (spot) => {
+    game.tweens.add({
       targets: game.npcAllies,
-      x: northEastOfNail.x,
-      y: northEastOfNail.y,
+      x: spot.x,
+      y: spot.y,
       duration: 1000,
       ease: Phaser.Math.Easing.Linear,
     })
   }
 
+  const southOfNail = getNailPositions(game.nail, 0)
+  const southIsSafe = !Phaser.Geom.Circle.Contains(doomPuddleHitbox, southOfNail.x, southOfNail.y);
+  const northEastOfNail = getNailPositions(game.nail, 2)
+  const northEastIsSafe = !Phaser.Geom.Circle.Contains(doomPuddleHitbox, northEastOfNail.x, northEastOfNail.y);
   const northWestOfNail = getNailPositions(game.nail, 1)
   const northWestIsSafe = !Phaser.Geom.Circle.Contains(doomPuddleHitbox, northWestOfNail.x, northWestOfNail.y);
-  if (northWestIsSafe) {
-    return game.tweens.add({
-      targets: game.npcAllies,
-      x: northWestOfNail.x,
-      y: northWestOfNail.y,
-      duration: 1000,
-      ease: Phaser.Math.Easing.Linear,
-    })
+  let safeArray, spotArray
+
+  switch (curPhase) {
+    case 0:
+      safeArray = [northEastIsSafe, northWestIsSafe, southIsSafe]
+      spotArray = [northEastOfNail, northWestOfNail, southOfNail]
+      break;
+    case 1:
+      safeArray = [northWestIsSafe, southIsSafe, northEastIsSafe]
+      spotArray = [northWestOfNail, southOfNail, northEastOfNail]
   }
+
+  checkSpots(safeArray, spotArray)
 }
 
 const spawnSmallerDoom = (game, doomPuddle, doomPuddleHitbox, phase) => {
@@ -50,49 +55,49 @@ const spawnSmallerDoom = (game, doomPuddle, doomPuddleHitbox, phase) => {
   doomPuddle.destroy()
   const cleanseCircle = game.add.circle(x, y, 25, doomPuddleBackground);
   const cleanseCircleHitbox = new Phaser.Geom.Circle(x, y, 25);
+  game.cleanseCirclesVisual[phase] = cleanseCircle
   game.cleanseCircles[phase] = cleanseCircleHitbox
   game.activeCleanseCircles[phase] = true
-  return { cleanseCircle, cleanseCircleHitbox }
+}
+
+const cleanseDoom = (game, phase) => {
+  if (game.doomCleanseOrder[phase].name !== 'player') {
+    game.tweens.add({
+      targets: game.doomCleanseOrder[phase],
+      x: game.cleanseCircles[phase].x,
+      y: game.cleanseCircles[phase].y,
+      duration: 1000,
+      ease: Phaser.Math.Easing.Linear,
+    })
+    setTimeout(() => {
+      game.cleanseCirclesVisual[phase].destroy()
+      game.activeCleanseCircles[phase] = false
+    }, 1250)
+  }
+}
+
+const doTheDoomDance = (game, player, order, phase) => {
+  setTimeout(() => {
+    const doomPuddle = game.add.circle(player.x, player.y, 80, doomPuddleBackground);
+    const doomPuddleHitbox = new Phaser.Geom.Circle(doomPuddle.x, doomPuddle.y, doomPuddle.radius);
+    setTimeout(() => {
+      moveOutOfDoom(game, doomPuddleHitbox, order + phase)
+    }, 500)
+    setTimeout(() => {
+      spawnSmallerDoom(game, doomPuddle, doomPuddleHitbox, order + phase)
+    }, 3000)
+    setTimeout(() => {
+      cleanseDoom(game, order + phase)
+    }, 3500)
+  }, 5000 * order)
 }
 
 const nailDoom = (game, phase) => {
-  const spawnDoomPuddle = (player, order, phase) => {
-    setTimeout(() => {
-      const doomPuddle = game.add.circle(player.x, player.y, 80, doomPuddleBackground);
-      const doomPuddleHitbox = new Phaser.Geom.Circle(doomPuddle.x, doomPuddle.y, doomPuddle.radius);
-      let cleanseCircle, cleanseCircleHitbox
-      setTimeout(() => {
-        moveOutOfDoom(game, doomPuddleHitbox)
-      }, 500)
-      setTimeout(() => {
-        const smallDooms = spawnSmallerDoom(game, doomPuddle, doomPuddleHitbox, phase + order)
-        cleanseCircle = smallDooms.doomCleanser
-        cleanseCircleHitbox = smallDooms.doomCleanserHitbox
-      }, 3000)
-      setTimeout(() => {
-        // cleanseDoom()
-      }, 3500)
-    }, 5000 * order)
-  }
-
-  //   // if (player.name !== 'player') {
-  //   //   setTimeout(() => {
-  //   //     game.tweens.add({
-  //   //       targets: player,
-  //   //       x: doomPuddle.x,
-  //   //       y: doomPuddle.y,
-  //   //       duration: 1000,
-  //   //       ease: Phaser.Math.Easing.Linear,
-  //   //     })
-  //   //   }, 4000)
-  //   // }
-  // }
-
   switch (phase) {
-    case 1:
-      const doomPuddles = game.doomOrder.slice(0,2)
+    case 0:
+      const doomPuddles = game.doomPuddleOrder.slice(0,2)
       doomPuddles.forEach((player, idx) => {
-        spawnDoomPuddle(player, idx, phase - 1)
+        doTheDoomDance(game, player, idx, phase)
       })
   }
 }

@@ -26,12 +26,14 @@ export class NailPhaseScene extends Phaser.Scene {
     this.nailCastObject
     this.nailCastText
 
-    this.doomOrder
+    this.doomCleaseOrder
+    this.doomPuddleOrder
     this.thunderOrder
     this.iceOrder
     this.fireTetherOrder
     this.quoteOrder
 
+    this.cleanseCirclesVisual
     this.cleanseCircles
     this.activeCleanseCircles
     this.playersCleanseCircleIdx
@@ -65,34 +67,38 @@ export class NailPhaseScene extends Phaser.Scene {
     setupSprites(this)
     setupOrders(this)
     setupStatements(this)
+    this.cleanseCirclesVisual = [null, null, null, null, null, null, null, null]
     this.cleanseCircles = [null, null, null, null, null, null, null, null]
     this.activeCleanseCircles = [false, false, false, false, false, false, false, false]
     this.playersCleanseCircleIdx = null
-    this.statementOne = ''
-    this.statementTwo = ''
-    this.statementThree = ''
+    this.statementOne
+    this.statementTwo
+    this.statementThree
 
-    // this.time.delayedCall(3000, () => {
-    //   this.nailCastObject = {
-    //     text: "Bahamut's Favor",
-    //     time: 5000
-    //   }
-    // })
 
-    // this.time.delayedCall(10000, () => {
-    //   nailThunder(this, 1)
-    //   nailStatements(this, 1)
-    // })
+    this.doomCleanseOrder = [this.tank1, this.tank2]
+    this.doomPuddleOrder = [this.healer1, this.healer2]
 
-    // this.time.delayedCall(20000, () => {
-    //   nailDoom(this, 1)
-    // })
-
-    this.doomOrder = [this.tank1, this.tank2]
-
-    this.time.delayedCall(1000, () => {
-      nailDoom(this, 1)
+    this.time.delayedCall(3000, () => {
+      this.nailCastObject = {
+        text: "Bahamut's Favor",
+        time: 5000
+      }
     })
+
+    this.time.delayedCall(10000, () => {
+      nailThunder(this, 1)
+      nailStatements(this, 1)
+    })
+
+    this.time.delayedCall(20000, () => {
+      nailDoom(this, 0)
+    })
+
+
+    // this.time.delayedCall(1000, () => {
+    //   nailDoom(this, 0)
+    // })
   }
 
   update() {

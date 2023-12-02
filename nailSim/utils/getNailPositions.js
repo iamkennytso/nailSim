@@ -1,4 +1,4 @@
-const getNailPositions = (nail, pos = 2) => {
+const getNailPositions = (nail, pos) => {
   // 2   1
   //  ◯
   //  0

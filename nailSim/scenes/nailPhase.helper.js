@@ -64,7 +64,8 @@ export const setupSprites = game => {
 
 export const setupOrders = (game) => {
   game.thunderOrder = shuffle([...game.npcAllies, game.player])
-  game.doomOrder = shuffle([...game.npcAllies, game.player])
+  game.doomCleanseOrder = shuffle([...game.npcAllies, game.player])
+  game.doomPuddleOrder = shuffle([...game.doomCleanseOrder])
   game.iceOrder = shuffle([...game.npcAllies, game.player])
   game.fireTetherOrder = shuffle([game.tank2, game.healer2, game.dps4, game.player])
 }
